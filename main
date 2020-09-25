@@ -1,0 +1,38 @@
+import pyryver #pip install pyryver
+import asyncio
+
+
+async def main():
+    # Connect to ryver
+    async with pyryver.Ryver("Organization", "Username", "Password") as ryver:
+        # Load all chats
+        await ryver.load_chats()
+        # Get the bot's user
+        me = ryver.get_user(username="Username")
+        # Connect to the websockets interface
+        async with ryver.get_live_session() as session:
+            @session.on_chat
+            async def on_message(msg: pyryver.WSChatMessageData):
+                # Print out the message's text
+                # Reply to the message
+                # Make sure to check that the message isn't from the bot itself
+                if msg.from_jid != me.get_jid() and msg.text == "Keyword":
+                       
+                    # Send a message to the same chat
+                    # This could be either a user (for a private message) or a forum/team
+                    forum_or_team = ryver.get_groupchat(name="Forum")
+                    await forum_or_team.send_message("Message")
+                    print("Ran")
+                
+                
+
+            @session.on_connection_loss
+            async def on_connection_loss():
+                await session.close()
+
+            # run until session.close() is called
+            await session.run_forever()
+
+asyncio.get_event_loop().run_until_complete(main())
+
+()
