@@ -1,7 +1,12 @@
 import pyryver #pip install pyryver
 import asyncio
 
+# Creator to show the bot with a custom name and pfp
+creator = Creator(
+    name="Non-existant user",
+    avatar="https://brainlyus.ryver.com/images/default-user.png",
 
+    )
 async def main():
     # Connect to ryver
     async with pyryver.Ryver("Organization", "Username", "Password") as ryver:
@@ -21,7 +26,7 @@ async def main():
                     # Send a message to the same chat
                     # This could be either a user (for a private message) or a forum/team
                     forum_or_team = ryver.get_groupchat(name="Forum")
-                    await forum_or_team.send_message("Message")
+                    await forum_or_team.send_message("Message", creator)
                     print("Ran")
                 
                 
